@@ -4,6 +4,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.charityapp.model.DonationRequest;
 import com.charityapp.model.Donor;
@@ -129,12 +131,62 @@ public class CharityDAO implements Charity {
 		
 		catch(SQLException e)
 		{
-			e.getMessage();
+//			e.getMessage();
 			e.printStackTrace();
 		}
 		
 	}
 	
 	/** List  **/
+	public List<DonationRequest> listDonationRequest()
+	{
+		
+		Connection conn = null;
+		DonationRequest request = null;
+		PreparedStatement pstmt = null;
+		List<DonationRequest> list = null;
+		
+		try {
+			
+			String requestType;
+			String description;
+			Double requestAmount;
+			String date;
+			
+			conn = ConnectionUtil.getConnection();
+			
+			String sql_stmt = "SELECT request_type,description,request_amount,date FROM donation_request";
+			
+			pstmt = conn.prepareStatement(sql_stmt);
+			
+			ResultSet rs = pstmt.executeQuery();
+			
+			list = new ArrayList<DonationRequest>();
+			
+			request = new DonationRequest();
+			
+			while(rs.next())
+			{
+				requestType = rs.getString("request_type");
+				description = rs.getString("description");
+				requestAmount = rs.getDouble("request_amount");
+				date = rs.getString("date");
+				
+				request.setRequestType(requestType);
+				request.setDescription(description);
+				request.setRequestAmount(requestAmount);
+				request.setDate(date);
+				
+				list.add(request);
+				
+			}
+		}
+		catch(SQLException e)
+		{
+			e.printStackTrace();
+		}
+		
+		return list;
+	}
 
 }

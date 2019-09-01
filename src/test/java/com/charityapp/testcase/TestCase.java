@@ -4,6 +4,7 @@ import static org.junit.Assert.*;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.List;
 
 import org.junit.Test;
 
@@ -101,5 +102,17 @@ public class TestCase {
 				System.out.println(e.getMessage());
 			}
 		
+	}
+	
+	/** List donation request **/
+	@Test
+	public void listDonationRequestTest()
+	{
+		
+		Charity charity = new CharityDAO();
+		
+		List<DonationRequest> list =  charity.listDonationRequest();
+		
+		assertNotNull(list);
 	}
 }
