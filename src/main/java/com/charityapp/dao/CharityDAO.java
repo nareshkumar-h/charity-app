@@ -5,6 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import com.charityapp.model.DonationRequest;
 import com.charityapp.model.Donor;
 import com.charityapp.util.ConnectionUtil;
 
@@ -96,10 +97,44 @@ public class CharityDAO implements Charity {
 		return donor;
 	}
 	
-	public void donorRequest()
+	/** Donation request **/
+	public void donationRequest(DonationRequest request)
 	{
+		/** Get request details **/
+		String requestType = request.getRequestType();
+		String description = request.getDescription();
+		Double requestAmount = request.getRequestAmount();
+		Integer adminId = request.getAdminId();
 		
+		Connection conn = null;
+		
+		PreparedStatement pstmt = null;
+		
+		try {
+			
+			conn = ConnectionUtil.getConnection();
+			
+			String sql_stmt = "INSERT INTO donation_request(request_type,description,request_amount,admin_id) VALUES(?,?,?,?)";
+			
+			pstmt = conn.prepareStatement(sql_stmt);
+			
+			pstmt.setString(1, requestType);
+			pstmt.setString(2, description);
+			pstmt.setDouble(3, requestAmount);
+			pstmt.setInt(4, adminId);
+			
+			int rows = pstmt.executeUpdate();
+			System.out.println(rows + " " + "rows affected!");
+		}
+		
+		catch(SQLException e)
+		{
+			e.getMessage();
+			e.printStackTrace();
+		}
 		
 	}
+	
+	/** List  **/
 
 }

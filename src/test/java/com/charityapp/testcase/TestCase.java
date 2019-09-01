@@ -10,6 +10,7 @@ import org.junit.Test;
 import com.charityapp.dao.Charity;
 import com.charityapp.dao.CharityDAO;
 import com.charityapp.exception.ValidatorException;
+import com.charityapp.model.DonationRequest;
 import com.charityapp.model.Donor;
 import com.charityapp.util.ConnectionUtil;
 import com.charityapp.validator.UserValidator;
@@ -76,5 +77,29 @@ public class TestCase {
 		{
 			e.printStackTrace();
 		}
+	}
+	
+	/** Donation request test **/
+	@Test
+	public void donationRequestTest()
+	{
+		
+		Charity charity = new  CharityDAO();
+		DonationRequest request = new DonationRequest();
+			
+			request.setRequestType("Education");
+			request.setDescription("");
+			request.setRequestAmount(500.40);
+			request.setAdminId(1);
+			
+			try {
+			UserValidator.donationRequestValidator(request);
+			charity.donationRequest(request);
+			}
+			catch(ValidatorException e)
+			{
+				System.out.println(e.getMessage());
+			}
+		
 	}
 }
