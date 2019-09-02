@@ -13,6 +13,7 @@ import com.charityapp.dao.CharityDAO;
 import com.charityapp.exception.ValidatorException;
 import com.charityapp.model.DonationRequest;
 import com.charityapp.model.Donor;
+import com.charityapp.model.Transaction;
 import com.charityapp.util.ConnectionUtil;
 import com.charityapp.validator.UserValidator;
 
@@ -26,8 +27,7 @@ public class TestCase {
 		assertNotNull(conn);
 	}
 	
-	/** Donor register 
-	 * @throws SQLException **/
+	/** Donor register **/
 	@Test
 	public void donorRegisterTest() throws ValidatorException, SQLException {
 		
@@ -104,15 +104,70 @@ public class TestCase {
 		
 	}
 	
-	/** List donation request **/
+	/** List donation requests **/
 	@Test
 	public void listDonationRequestTest()
 	{
 		
 		Charity charity = new CharityDAO();
 		
-		List<DonationRequest> list =  charity.listDonationRequest();
+		List<DonationRequest> list;
 		
-		assertNotNull(list);
+		try {
+			
+			list = charity.listDonationRequest();
+			assertNotNull(list);
+		
+		} catch (SQLException e) {
+			
+			e.printStackTrace();
+			
+		}
+		
+		
+	}
+	
+	/** Balance Enquiry **/
+	@Test
+	public void balanceEnquiryTest()
+	{
+		
+		Transaction transaction = new Transaction();
+		
+		transaction.setAccountNo(1000001L);
+		Charity charity = new CharityDAO();
+		try {
+			
+			transaction = charity.balanceEnquiry(transaction);
+			
+			assertNotNull(transaction);
+			
+			System.out.println(transaction.getAmount());
+		
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+	}
+	
+	/** Deposite Money **/
+	@Test
+	public void depositeMoneyTest()
+	{
+		Charity charity = new CharityDAO();
+		Transaction transaction = new  Transaction();
+		
+		transaction.setAccountNo(1000001L);
+		transaction.setAmount(5000.00);
+		
+		int rows = charity.depositeMoney(transaction);
+		System.out.println(rows + " " + "rows affected!");
+	}
+	
+	/** Transaction **/
+	@Test
+	public void transaction()
+	{
+		
 	}
 }

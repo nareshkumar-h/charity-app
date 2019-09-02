@@ -9,6 +9,7 @@ import java.util.List;
 
 import com.charityapp.model.DonationRequest;
 import com.charityapp.model.Donor;
+import com.charityapp.model.Transaction;
 import com.charityapp.util.ConnectionUtil;
 
 public class CharityDAO implements Charity {
@@ -137,8 +138,8 @@ public class CharityDAO implements Charity {
 		
 	}
 	
-	/** List  **/
-	public List<DonationRequest> listDonationRequest()
+	/** List donation request **/
+	public List<DonationRequest> listDonationRequest() throws SQLException
 	{
 		
 		Connection conn = null;
@@ -177,6 +178,7 @@ public class CharityDAO implements Charity {
 				request.setRequestAmount(requestAmount);
 				request.setDate(date);
 				
+				/** Add data to list **/
 				list.add(request);
 				
 			}
@@ -185,8 +187,92 @@ public class CharityDAO implements Charity {
 		{
 			e.printStackTrace();
 		}
+		finally {
+			conn.close();
+			pstmt.close();
+		}
 		
 		return list;
 	}
+	
+	/** Get balance **/
+	
+	public Transaction balanceEnquiry(Transaction transaction) throws SQLException
+	{
+		Long accountNo = transaction.getAccountNo();
+		
+		Double amount = null;
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		Transaction transactionDetails = null;	
+		
+		String sql_stmt = "SELECT amount FROM bank_account WHERE account_no = ?";
+		
+		try {
+			
+			transactionDetails = new Transaction();
+			conn = ConnectionUtil.getConnection();
+			
+			pstmt = conn.prepareStatement(sql_stmt);
+			pstmt.setLong(1, accountNo);
+			
+			ResultSet rs = pstmt.executeQuery();
+			
+			while(rs.next())
+			{
+				amount = rs.getDouble("amount");
+				transactionDetails.setAmount(amount);
+			}
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		finally {
+			conn.close();
+			pstmt.close();
+		}
+		
+		return transactionDetails;
+		
+	}
+	
+	/** Deposite money **/
+	
+	public Integer depositeMoney(Transaction transaction)
+	{
+		Long accountNo = transaction.getAccountNo();
+		Double amount = transaction.getAmount();
+		
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		
+		String sql_stmt = "UPDATE bank_account SET amount = ? WHERE account_no = ?";
+		int rows = 0;
+		try {
+			conn = ConnectionUtil.getConnection();
+			pstmt = conn.prepareStatement(sql_stmt);
+			pstmt.setDouble(1, amount);
+			pstmt.setLong(2, accountNo);
+			
+			rows = pstmt.executeUpdate();
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		return rows;
+		
+	}
+	
+	/** Transaction **/
+	
+//	public void transaction(Transaction transaction)
+//	{
+//		
+//		Long accountNo = transaction.getAccountNo();
+//		Integer pinNo = transaction.getPinNo();
+//		Double amount = transaction.getAmount();
+//
+//	}
 
 }
