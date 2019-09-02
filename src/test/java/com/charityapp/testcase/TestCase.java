@@ -3,7 +3,6 @@ package com.charityapp.testcase;
 import static org.junit.Assert.*;
 
 import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.List;
 
@@ -133,17 +132,15 @@ public class TestCase {
 	public void balanceEnquiryTest()
 	{
 		
-		Transaction transaction = new Transaction();
-		
-		transaction.setAccountNo(1000001L);
+		Double amount = null;
 		Charity charity = new CharityDAO();
 		try {
 			
-			transaction = charity.balanceEnquiry(transaction);
+			amount = charity.balanceEnquiry(1000001L);
 			
-			assertNotNull(transaction);
+			assertNotNull(amount);
 			
-			System.out.println(transaction.getAmount());
+			System.out.println(amount);
 		
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -183,20 +180,30 @@ public class TestCase {
 	
 	/** Transaction **/
 	@Test
-	public void transaction()
+	public void transaction() throws SQLException
 	{
+		
 		Charity charity = new CharityDAO();
-		Transaction fromDonor = new Transaction();
-		Transaction toAdmin = new Transaction();
+		Transaction donor = new Transaction();
+		Transaction admin = new Transaction();
+//		charity.transaction(formDonor, toAdmin);
+		Double donorBalance = charity.balanceEnquiry(1000001L);
+		Double adminBalance = charity.balanceEnquiry(1000002L);
+		System.out.println("Donor balance:"+donorBalance+"Admin balance:"+adminBalance);
 		
-		fromDonor.setAccountNo(1000001L);
-		fromDonor.setPinNo(1234);
-		fromDonor.setAmount(1000.00);
+		Double donorAmount = donorBalance - 500;
+		Double adminAmount = adminBalance + 500;
 		
-		toAdmin.setAccountNo(1000002L);
-		toAdmin.setPinNo(1111);
-		toAdmin.setAmount(1500.00);
+		donor.setAccountNo(1000001L);
+		donor.setPinNo(1234);
+		donor.setAmount(donorAmount);
 		
-		charity.transaction(fromDonor, toAdmin);
+		admin.setAccountNo(1000002L);
+		admin.setPinNo(1111);
+		admin.setAmount(adminAmount);
+		
+		System.out.println("Donor balance:"+donorAmount+"Admin balance:"+adminAmount);
+		
+		charity.transaction(donor, admin);
 	}
 }

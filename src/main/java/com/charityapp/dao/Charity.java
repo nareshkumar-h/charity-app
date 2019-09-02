@@ -13,8 +13,8 @@ public interface Charity {
 	public Donor donorLogin(Donor donor) throws SQLException;
 	public void donationRequest(DonationRequest request);
 	public List<DonationRequest> listDonationRequest() throws SQLException;
-	public Transaction balanceEnquiry(Transaction transaction) throws SQLException;
+	public Double balanceEnquiry(Long accountNo) throws SQLException;
 	public Integer updateMoney(Transaction transaction);
-	public void transaction(Transaction formDonor,Transaction toAdmin );
+	public void transaction(Transaction donor,Transaction admin );
 
 }

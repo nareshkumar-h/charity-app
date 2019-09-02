@@ -7,8 +7,6 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.junit.experimental.theories.FromDataPoints;
-
 import com.charityapp.model.DonationRequest;
 import com.charityapp.model.Donor;
 import com.charityapp.model.Transaction;
@@ -199,20 +197,17 @@ public class CharityDAO implements Charity {
 	
 	/** Get balance **/
 	
-	public Transaction balanceEnquiry(Transaction transaction) throws SQLException
+	public Double balanceEnquiry(Long accountNo) throws SQLException
 	{
-		Long accountNo = transaction.getAccountNo();
 		
 		Double amount = null;
 		Connection conn = null;
 		PreparedStatement pstmt = null;
-		Transaction transactionDetails = null;	
 		
 		String sql_stmt = "SELECT amount FROM bank_account WHERE account_no = ?";
 		
 		try {
-			
-			transactionDetails = new Transaction();
+
 			conn = ConnectionUtil.getConnection();
 			
 			pstmt = conn.prepareStatement(sql_stmt);
@@ -223,7 +218,6 @@ public class CharityDAO implements Charity {
 			while(rs.next())
 			{
 				amount = rs.getDouble("amount");
-				transactionDetails.setAmount(amount);
 			}
 			
 		} catch (SQLException e) {
@@ -234,7 +228,7 @@ public class CharityDAO implements Charity {
 			pstmt.close();
 		}
 		
-		return transactionDetails;
+		return amount;
 		
 	}
 	
@@ -270,7 +264,7 @@ public class CharityDAO implements Charity {
 	
 	/** Transaction **/
 	
-	public void transaction(Transaction formDonor,Transaction toAdmin )
+	public void transaction(Transaction donor,Transaction admin )
 	{
 		
 		/** From Doner details **/
@@ -284,10 +278,10 @@ public class CharityDAO implements Charity {
 //		Double toAmount = toAdmin.getAmount();
 
 		/** Update donor money **/
-		updateMoney(formDonor);
+		updateMoney(donor);
 		
 		/** Update admin money **/
-		updateMoney(toAdmin);
+		updateMoney(admin);
 		
 	}
 
