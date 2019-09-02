@@ -30,6 +30,7 @@ public class UserValidator {
 		}
 	}
 	
+	/** Donor login validator **/
 	public static void donorLoginValidator(Donor donor) throws ValidatorException
 	{
 		String email = donor.getEmail();

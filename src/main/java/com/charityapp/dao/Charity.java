@@ -14,6 +14,7 @@ public interface Charity {
 	public void donationRequest(DonationRequest request);
 	public List<DonationRequest> listDonationRequest() throws SQLException;
 	public Transaction balanceEnquiry(Transaction transaction) throws SQLException;
-	public Integer depositeMoney(Transaction transaction);
+	public Integer updateMoney(Transaction transaction);
+	public void transaction(Transaction formDonor,Transaction toAdmin );
 
 }

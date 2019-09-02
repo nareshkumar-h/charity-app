@@ -3,6 +3,7 @@ package com.charityapp.testcase;
 import static org.junit.Assert.*;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.List;
 
@@ -80,7 +81,7 @@ public class TestCase {
 		}
 	}
 	
-	/** Donation request test **/
+	/** Create Donation request test **/
 	@Test
 	public void donationRequestTest()
 	{
@@ -159,8 +160,24 @@ public class TestCase {
 		
 		transaction.setAccountNo(1000001L);
 		transaction.setAmount(5000.00);
+		transaction.setPinNo(1234);
 		
-		int rows = charity.depositeMoney(transaction);
+		int rows = charity.updateMoney(transaction);
+		System.out.println(rows + " " + "rows affected!");
+	}
+	
+	/** Withdraw Money **/
+	@Test
+	public void withdrawMoneyTest()
+	{
+		Charity charity = new CharityDAO();
+		Transaction transaction = new  Transaction();
+		
+		transaction.setAccountNo(1000001L);
+		transaction.setAmount(1500.00);
+		transaction.setPinNo(1234);
+		
+		int rows = charity.updateMoney(transaction);
 		System.out.println(rows + " " + "rows affected!");
 	}
 	
@@ -168,6 +185,18 @@ public class TestCase {
 	@Test
 	public void transaction()
 	{
+		Charity charity = new CharityDAO();
+		Transaction fromDonor = new Transaction();
+		Transaction toAdmin = new Transaction();
 		
+		fromDonor.setAccountNo(1000001L);
+		fromDonor.setPinNo(1234);
+		fromDonor.setAmount(1000.00);
+		
+		toAdmin.setAccountNo(1000002L);
+		toAdmin.setPinNo(1111);
+		toAdmin.setAmount(1500.00);
+		
+		charity.transaction(fromDonor, toAdmin);
 	}
 }

@@ -7,6 +7,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.junit.experimental.theories.FromDataPoints;
+
 import com.charityapp.model.DonationRequest;
 import com.charityapp.model.Donor;
 import com.charityapp.model.Transaction;
@@ -236,23 +238,25 @@ public class CharityDAO implements Charity {
 		
 	}
 	
-	/** Deposite money **/
+	/** Update money **/
 	
-	public Integer depositeMoney(Transaction transaction)
+	public Integer updateMoney(Transaction transaction)
 	{
 		Long accountNo = transaction.getAccountNo();
 		Double amount = transaction.getAmount();
+		Integer pinNo = transaction.getPinNo();
 		
 		Connection conn = null;
 		PreparedStatement pstmt = null;
 		
-		String sql_stmt = "UPDATE bank_account SET amount = ? WHERE account_no = ?";
+		String sql_stmt = "UPDATE bank_account SET amount = ? WHERE account_no = ? AND pin_no = ?";
 		int rows = 0;
 		try {
 			conn = ConnectionUtil.getConnection();
 			pstmt = conn.prepareStatement(sql_stmt);
 			pstmt.setDouble(1, amount);
 			pstmt.setLong(2, accountNo);
+			pstmt.setInt(3, pinNo);
 			
 			rows = pstmt.executeUpdate();
 			
@@ -266,13 +270,25 @@ public class CharityDAO implements Charity {
 	
 	/** Transaction **/
 	
-//	public void transaction(Transaction transaction)
-//	{
-//		
-//		Long accountNo = transaction.getAccountNo();
-//		Integer pinNo = transaction.getPinNo();
-//		Double amount = transaction.getAmount();
-//
-//	}
+	public void transaction(Transaction formDonor,Transaction toAdmin )
+	{
+		
+		/** From Doner details **/
+//		Long fromAccountNo = formDonor.getAccountNo();
+//		Integer fromPinNo = formDonor.getPinNo();
+//		Double FromAmount = formDonor.getAmount();
+		
+		/** To Admin details **/
+//		Long toAccountNo = toAdmin.getAccountNo();
+//		Integer toPinNo = toAdmin.getPinNo();
+//		Double toAmount = toAdmin.getAmount();
+
+		/** Update donor money **/
+		updateMoney(formDonor);
+		
+		/** Update admin money **/
+		updateMoney(toAdmin);
+		
+	}
 
 }
