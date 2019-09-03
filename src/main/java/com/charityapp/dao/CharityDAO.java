@@ -236,6 +236,36 @@ public class CharityDAO implements Charity {
 		
 	}
 	
+	/** Get donation request balance **/
+	
+	public Double donationRequestBalance(Integer requestId)
+	{
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		Double requestAount = null;
+		try {
+			String  sql_stmt = "SELECT request_amount FROM donation_request WHERE request_id = ?";
+			
+			conn = ConnectionUtil.getConnection();
+			
+			pstmt = conn.prepareStatement(sql_stmt);
+			pstmt.setInt(1, requestId);
+			
+			ResultSet rs = pstmt.executeQuery();
+			
+			if(rs.next())
+			{
+				requestAount = rs.getDouble("request_amount");
+			}
+			
+		}catch(SQLException e)
+		{
+			e.printStackTrace();
+		}
+		
+		return requestAount;
+	}
+	
 	/** Update money **/
 	
 	public Integer updateMoney(Transaction transaction)
@@ -243,11 +273,17 @@ public class CharityDAO implements Charity {
 		Long accountNo = transaction.getAccountNo();
 		Double amount = transaction.getAmount();
 		Integer pinNo = transaction.getPinNo();
+		String transactiontype = transaction.getTransactionType();
 		
 		Connection conn = null;
 		PreparedStatement pstmt = null;
-		
-		String sql_stmt = "UPDATE bank_account SET amount = ? WHERE account_no = ? AND pin_no = ?";
+		String sql_stmt = null;
+		if(transactiontype == "debit")
+		{
+			sql_stmt = "UPDATE bank_account SET amount = amount - ? WHERE account_no = ? AND pin_no = ?";
+		}else {
+			sql_stmt = "UPDATE bank_account SET amount = amount + ? WHERE account_no = ? AND pin_no = ?";
+		}
 		int rows = 0;
 		try {
 			conn = ConnectionUtil.getConnection();
@@ -275,7 +311,7 @@ public class CharityDAO implements Charity {
 		
 		try {
 			conn = ConnectionUtil.getConnection();
-			String sql_stmt = "UPDATE donation_request SET request_amount = ? WHERE request_id = ?";
+			String sql_stmt = "UPDATE donation_request SET request_amount = request_amount - ? WHERE request_id = ?";
 			pstmt = conn.prepareStatement(sql_stmt);
 			pstmt.setDouble(1, request.getAmount());
 			pstmt.setInt(2, request.getRequestId());

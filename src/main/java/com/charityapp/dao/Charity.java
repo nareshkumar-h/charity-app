@@ -17,5 +17,6 @@ public interface Charity {
 	public Integer updateMoney(Transaction transaction);
 	public void transaction(Transaction donor,Transaction admin );
 	public void updateRequestAmount(DonationRequest request);
+	public Double donationRequestBalance(Integer requestId);
 
 }

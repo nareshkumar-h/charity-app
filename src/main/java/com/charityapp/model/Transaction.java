@@ -7,7 +7,14 @@ public class Transaction {
 	private Double amount;
 	private Integer pinNo;
 	private Boolean active;
+	private String transactionType;
 	
+	public String getTransactionType() {
+		return transactionType;
+	}
+	public void setTransactionType(String transactionType) {
+		this.transactionType = transactionType;
+	}
 	public Integer getId() {
 		return id;
 	}
