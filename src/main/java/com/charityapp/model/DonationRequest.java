@@ -9,7 +9,14 @@ public class DonationRequest {
 	private Integer adminId;
 	private String date;
 	private Boolean active;
+	private Double amount;
 	
+	public Double getAmount() {
+		return amount;
+	}
+	public void setAmount(Double amount) {
+		this.amount = amount;
+	}
 	public int getRequestId() {
 		return requestId;
 	}

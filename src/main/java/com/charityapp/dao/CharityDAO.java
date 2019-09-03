@@ -79,13 +79,17 @@ public class CharityDAO implements Charity {
 			
 			String donorName = null;
 			String donorEmail = null;
+			String donorRole = null;
 			
 			while(rs.next())
 			{
 				donorEmail = rs.getString("email");
 				donorName = rs.getString("name");
+				donorRole = rs.getString("role");
+				
 				donor.setEmail(donorEmail);
 				donor.setName(donorName);
+				donor.setRole(donorRole);
 			}
 		}
 		catch(SQLException e)
@@ -260,6 +264,27 @@ public class CharityDAO implements Charity {
 		
 		return rows;
 		
+	}
+	
+	/** Update donation request amount **/
+	
+	public void updateRequestAmount(DonationRequest request)
+	{
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		
+		try {
+			conn = ConnectionUtil.getConnection();
+			String sql_stmt = "UPDATE donation_request SET request_amount = ? WHERE request_id = ?";
+			pstmt = conn.prepareStatement(sql_stmt);
+			pstmt.setDouble(1, request.getAmount());
+			pstmt.setInt(2, request.getRequestId());
+			pstmt.executeUpdate();
+		}
+		catch(SQLException e)
+		{
+			e.printStackTrace();
+		}
 	}
 	
 	/** Transaction **/

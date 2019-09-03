@@ -16,5 +16,6 @@ public interface Charity {
 	public Double balanceEnquiry(Long accountNo) throws SQLException;
 	public Integer updateMoney(Transaction transaction);
 	public void transaction(Transaction donor,Transaction admin );
+	public void updateRequestAmount(DonationRequest request);
 
 }

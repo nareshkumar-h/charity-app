@@ -14,6 +14,7 @@ import com.charityapp.exception.ValidatorException;
 import com.charityapp.model.DonationRequest;
 import com.charityapp.model.Donor;
 import com.charityapp.model.Transaction;
+import com.charityapp.service.DonorService;
 import com.charityapp.util.ConnectionUtil;
 import com.charityapp.validator.UserValidator;
 
@@ -29,55 +30,29 @@ public class TestCase {
 	
 	/** Donor register **/
 	@Test
-	public void donorRegisterTest() throws ValidatorException, SQLException {
-		
-		Charity charity = new CharityDAO();
-		Donor donor = null;	
-		
-		try {
-			
-			donor = new Donor();
-			donor.setName("testuser");
-			donor.setEmail("");
-			donor.setPassword("test");
-			donor.setDob("05-06-1997");
-			donor.setGender('m');
-			donor.setRole("role_donor");
-			
-			UserValidator.donorRegisterValidator(donor);
-			charity.donorRegister(donor);
-		} catch (ValidatorException e) {
-			/** Display the error msg **/
-			System.out.println(e.getMessage());
-		}
-		
+	public void donorRegister()
+	{
+		Donor donor = new Donor();
+		donor.setName(" ");
+		donor.setEmail(" ");
+		donor.setPassword("mypass");
+		donor.setDob("05-06-1997");
+		donor.setGender('m');
+		donor.setRole("role_donor");
+		DonorService.donorRegisterService(donor);
 	}
+
 	
 	/** Donor login **/
 	@Test
-	public void donorLoginTest()
+	public void donorLogin()
 	{
-		Charity charity = new CharityDAO();
 		Donor donor = new Donor();
-		
-		try {
-			donor.setEmail("krishna@gmail.com");
-			donor.setPassword("mypass");
-			
-			UserValidator.donorLoginValidator(donor);
-			
-			Donor donorObj = charity.donorLogin(donor);
-			
-			assertNotNull(donorObj);
-		}
-		catch(ValidatorException e)
-		{
-			e.printStackTrace();
-		}
-		catch(SQLException e)
-		{
-			e.printStackTrace();
-		}
+		donor.setEmail("krishna@gmail.com");
+		donor.setPassword("mypass");
+		donor = DonorService.donorLoginService(donor);
+		assertNotNull(donor);
+		System.out.println(donor.getRole());
 	}
 	
 	/** Create Donation request test **/
@@ -117,6 +92,7 @@ public class TestCase {
 			
 			list = charity.listDonationRequest();
 			assertNotNull(list);
+			System.out.println("RequestType:" + list.get(0).getRequestType());
 		
 		} catch (SQLException e) {
 			
@@ -164,19 +140,19 @@ public class TestCase {
 	}
 	
 	/** Withdraw Money **/
-	@Test
-	public void withdrawMoneyTest()
-	{
-		Charity charity = new CharityDAO();
-		Transaction transaction = new  Transaction();
-		
-		transaction.setAccountNo(1000001L);
-		transaction.setAmount(1500.00);
-		transaction.setPinNo(1234);
-		
-		int rows = charity.updateMoney(transaction);
-		System.out.println(rows + " " + "rows affected!");
-	}
+//	@Test
+//	public void withdrawMoneyTest()
+//	{
+//		Charity charity = new CharityDAO();
+//		Transaction transaction = new  Transaction();
+//		
+//		transaction.setAccountNo(1000001L);
+//		transaction.setAmount(1500.00);
+//		transaction.setPinNo(1234);
+//		
+//		int rows = charity.updateMoney(transaction);
+//		System.out.println(rows + " " + "rows affected!");
+//	}
 	
 	/** Transaction **/
 	@Test
@@ -205,5 +181,13 @@ public class TestCase {
 		System.out.println("Donor balance:"+donorAmount+"Admin balance:"+adminAmount);
 		
 		charity.transaction(donor, admin);
+		
+		/** Update request amount **/
+		
+		DonationRequest request = new DonationRequest();
+		request.setAmount(500D);
+		request.setRequestId(4);
+		charity.updateRequestAmount(request);
+		
 	}
 }
