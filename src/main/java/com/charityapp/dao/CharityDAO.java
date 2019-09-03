@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.charityapp.model.Admin;
 import com.charityapp.model.DonationRequest;
 import com.charityapp.model.Donor;
 import com.charityapp.model.Transaction;
@@ -102,6 +103,46 @@ public class CharityDAO implements Charity {
 		}
 		
 		return donor;
+	}
+	
+	/** Admin Login **/
+	public Admin adminLogin(Admin admin)
+	{
+		
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		Admin adminObj = null;
+		try {
+			String adminEmail = admin.getEmail();
+			String adminPassword = admin.getPassword();
+			conn = ConnectionUtil.getConnection();
+			String sql_stmt = "SELECT name,email,role,date FROM admin WHERE email = ? AND password = ?";
+			pstmt = conn.prepareStatement(sql_stmt);
+			pstmt.setString(1, adminEmail);
+			pstmt.setString(2, adminPassword);
+			ResultSet rs = pstmt.executeQuery();
+			adminObj = new Admin();
+			
+			while(rs.next())
+			{
+				String name = rs.getString("name");
+				String email = rs.getString("email");
+				String role = rs.getString("role");
+				String date = rs.getString("date");
+				adminObj.setName(name);
+				adminObj.setEmail(email);
+				adminObj.setRole(role);
+				adminObj.setDate(date);
+			}
+		}
+		catch(SQLException e)
+		{
+			e.printStackTrace();
+		}
+		
+		
+		return adminObj;
+		
 	}
 	
 	/** Donation request **/
@@ -323,27 +364,17 @@ public class CharityDAO implements Charity {
 		}
 	}
 	
-	/** Transaction **/
-	
-	public void transaction(Transaction donor,Transaction admin )
-	{
-		
-		/** From Doner details **/
-//		Long fromAccountNo = formDonor.getAccountNo();
-//		Integer fromPinNo = formDonor.getPinNo();
-//		Double FromAmount = formDonor.getAmount();
-		
-		/** To Admin details **/
-//		Long toAccountNo = toAdmin.getAccountNo();
-//		Integer toPinNo = toAdmin.getPinNo();
-//		Double toAmount = toAdmin.getAmount();
-
-		/** Update donor money **/
-		updateMoney(donor);
-		
-		/** Update admin money **/
-		updateMoney(admin);
-		
-	}
+//	/** Transaction **/
+//	
+//	public void transaction(Transaction donor,Transaction admin)
+//	{
+//
+//		/** Update donor money **/
+//		updateMoney(donor);
+//		
+//		/** Update admin money **/
+//		updateMoney(admin);
+//		
+//	}
 
 }

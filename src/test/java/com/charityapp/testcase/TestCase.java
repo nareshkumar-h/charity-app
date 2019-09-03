@@ -14,7 +14,9 @@ import com.charityapp.exception.ValidatorException;
 import com.charityapp.model.DonationRequest;
 import com.charityapp.model.Donor;
 import com.charityapp.model.Transaction;
+import com.charityapp.service.DonationService;
 import com.charityapp.service.DonorService;
+import com.charityapp.service.TransactionService;
 import com.charityapp.util.ConnectionUtil;
 import com.charityapp.validator.UserValidator;
 
@@ -62,13 +64,15 @@ public class TestCase {
 		request.setDescription("");
 		request.setRequestAmount(500.40);
 		request.setAdminId(1);
+		
+		DonationService.donotionRequestService(request);
 
-		try {
-			UserValidator.donationRequestValidator(request);
-			charity.donationRequest(request);
-		} catch (ValidatorException e) {
-			System.out.println(e.getMessage());
-		}
+//		try {
+//			UserValidator.donationRequestValidator(request);
+//			charity.donationRequest(request);
+//		} catch (ValidatorException e) {
+//			System.out.println(e.getMessage());
+//		}
 
 	}
 
@@ -76,21 +80,35 @@ public class TestCase {
 	@Test
 	public void listDonationRequestTest() {
 
-		Charity charity = new CharityDAO();
+//		Charity charity = new CharityDAO();
 
 		List<DonationRequest> list;
 
-		try {
+//		try {
 
-			list = charity.listDonationRequest();
-			assertNotNull(list);
-			System.out.println("RequestType:" + list.get(0).getRequestType());
+//			list = charity.listDonationRequest();
+//			assertNotNull(list);
+//			System.out.println("RequestType:" + list.get(0).getRequestType());
+			
+			list = DonationService.donationRequestService();
+			System.out.println(list);
+			System.out.println("=====Admin ID=======");
+			for(DonationRequest request : list)
+			{
+				
+				System.out.println(request.getRequestType());
+				System.out.println("============");
+			}
+//			for(List<DonationRequest> lists : list)
+//			{
+//				requ
+//			}
 
-		} catch (SQLException e) {
-
-			e.printStackTrace();
-
-		}
+//		} catch (SQLException e) {
+//
+//			e.printStackTrace();
+//
+//		}
 
 	}
 
@@ -100,18 +118,14 @@ public class TestCase {
 
 		Double amount = null;
 		Charity charity = new CharityDAO();
-		try {
 
-			amount = charity.balanceEnquiry(1000001L);
+//			amount = charity.balanceEnquiry(1000001L);
+			Long accountNo = 1000001L;
+			amount = TransactionService.getBalanceService(accountNo);
 
 			assertNotNull(amount);
 
-			System.out.println(amount);
-
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-
+			System.out.println("Balance Enquiry : " + amount);
 	}
 
 //	/** Deposite Money **/
@@ -124,6 +138,7 @@ public class TestCase {
 //		transaction.setAccountNo(1000001L);
 //		transaction.setAmount(5000.00);
 //		transaction.setPinNo(1234);
+//		transaction.setTransactionType("debit");
 //		
 //		int rows = charity.updateMoney(transaction);
 //		System.out.println(rows + " " + "rows affected!");
@@ -131,14 +146,15 @@ public class TestCase {
 
 	/** Withdraw Money **/
 //	@Test
-//	public void withdrawMoneyTest()
+//	public void withdrawMoneyTest()	
 //	{
 //		Charity charity = new CharityDAO();
 //		Transaction transaction = new  Transaction();
 //		
 //		transaction.setAccountNo(1000001L);
-//		transaction.setAmount(1500.00);
+//		transaction.setAmount(11500.00);
 //		transaction.setPinNo(1234);
+//		transaction.setTransactionType("credit");
 //		
 //		int rows = charity.updateMoney(transaction);
 //		System.out.println(rows + " " + "rows affected!");
@@ -149,7 +165,7 @@ public class TestCase {
 	@Test
 	public void deonationRequestBalance() {
 		Charity charity = new CharityDAO();
-		Double balanceAmount = charity.donationRequestBalance(4);
+		Double balanceAmount = charity.donationRequestBalance(5);
 		System.out.println("Donation request balance amount:" + balanceAmount);
 	}
 
@@ -157,16 +173,12 @@ public class TestCase {
 	@Test
 	public void transaction() throws SQLException {
 
-		Charity charity = new CharityDAO();
+//		Charity charity = new CharityD
+
+//		TransactionService transaction = new TransactionService();
+		
 		Transaction donor = new Transaction();
 		Transaction admin = new Transaction();
-//		charity.transaction(formDonor, toAdmin);
-//		Double donorBalance = charity.balanceEnquiry(1000001L);
-//		Double adminBalance = charity.balanceEnquiry(1000002L);
-//		System.out.println("Donor balance:" + donorBalance + "Admin balance:" + adminBalance);
-
-//		Double donorAmount = donorBalance - 500;
-//		Double adminAmount = adminBalance + 500;
 		
 		Double donorAmount = 500D;
 		Double adminAmount = 500D;
@@ -183,16 +195,18 @@ public class TestCase {
 
 		System.out.println("Donor balance:" + donorAmount + "Admin balance:" + adminAmount);
 
-		charity.transaction(donor, admin);
+//		charity.transaction(donor, admin);
+		TransactionService.transaction(donor, admin);
 
 		/** Update request amount **/
 
 		DonationRequest request = new DonationRequest();
-//		Double balanceAmount = charity.donationRequestBalance(4) - 500;
+
 		Double balanceAmount = 500D;
 		request.setAmount(balanceAmount);
 		request.setRequestId(5);
-		charity.updateRequestAmount(request);
+//		charity.updateRequestAmount(request);
+		TransactionService.updateRequestAmountService(request);
 
 	}
 }
