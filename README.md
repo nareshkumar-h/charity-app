@@ -6,6 +6,6 @@
   - Register
   - Login
 - Admin
-  - Admin Login
+  - Login
 - Generate Donation Rquest
 - Fund Transwer
