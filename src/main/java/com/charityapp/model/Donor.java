@@ -9,13 +9,15 @@ public class Donor {
 	private String dob;
 	private Character gender;
 	private String role;
+	private Boolean isDonorLoggedIn;
 	
-	@Override
-	public String toString() {
-		return "Donor [id=" + id + ", name=" + name + ", email=" + email + ", password=" + password + ", dob=" + dob
-				+ ", gender=" + gender + ", role=" + role + "]";
+	
+	public Boolean getIsDonorLoggedIn() {
+		return isDonorLoggedIn;
 	}
-	
+	public void setIsDonorLoggedIn(Boolean isDonorLoggedIn) {
+		this.isDonorLoggedIn = isDonorLoggedIn;
+	}
 	public int getId() {
 		return id;
 	}

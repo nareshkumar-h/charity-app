@@ -13,14 +13,14 @@ import com.charityapp.validator.UserValidator;
 public class DonorService {
 	
 	/** Donor register service **/
-	public static void donorRegisterService(Donor donor)
+	public static Integer donorRegisterService(Donor donor)
 	{
 		Charity charity = new CharityDAO();
-		
+		int rows = 0;
 		try {
 			
 			UserValidator.donorRegisterValidator(donor);
-			charity.donorRegister(donor);
+			rows = charity.donorRegister(donor);
 		
 		}  catch (ValidatorException e) {
 			
@@ -31,6 +31,7 @@ public class DonorService {
 			e.printStackTrace();
 		
 		}
+		return rows;
 	}
 	
 	/** Donor login service **/

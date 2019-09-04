@@ -20,37 +20,13 @@ import com.charityapp.service.TransactionService;
 import com.charityapp.util.ConnectionUtil;
 import com.charityapp.validator.UserValidator;
 
-public class TestCase {
+public class TransactionTestCase {
 
 	/** Connection test **/
 	@Test
 	public void connectionTest() {
 		Connection conn = ConnectionUtil.getConnection();
 		assertNotNull(conn);
-	}
-
-	/** Donor register **/
-	@Test
-	public void donorRegister() {
-		Donor donor = new Donor();
-		donor.setName(" ");
-		donor.setEmail(" ");
-		donor.setPassword("mypass");
-		donor.setDob("05-06-1997");
-		donor.setGender('m');
-		donor.setRole("role_donor");
-		DonorService.donorRegisterService(donor);
-	}
-
-	/** Donor login **/
-	@Test
-	public void donorLogin() {
-		Donor donor = new Donor();
-		donor.setEmail("krishna@gmail.com");
-		donor.setPassword("mypass");
-		donor = DonorService.donorLoginService(donor);
-		assertNotNull(donor);
-		assertEquals("role_donor", donor.getRole());
 	}
 
 	/** Create Donation request test **/
@@ -116,49 +92,46 @@ public class TestCase {
 	@Test
 	public void balanceEnquiryTest() {
 
-		Double amount = null;
-		Charity charity = new CharityDAO();
-
-//			amount = charity.balanceEnquiry(1000001L);
+			Double amount = null;
 			Long accountNo = 1000001L;
 			amount = TransactionService.getBalanceService(accountNo);
+			Double expectAmount = 34500D;
+			assertEquals(expectAmount,amount);
 
-			assertNotNull(amount);
-
-			System.out.println("Balance Enquiry : " + amount);
 	}
 
 //	/** Deposite Money **/
-//	@Test
-//	public void depositeMoneyTest()
-//	{
-//		Charity charity = new CharityDAO();
-//		Transaction transaction = new  Transaction();
-//		
-//		transaction.setAccountNo(1000001L);
-//		transaction.setAmount(5000.00);
-//		transaction.setPinNo(1234);
-//		transaction.setTransactionType("debit");
-//		
-//		int rows = charity.updateMoney(transaction);
-//		System.out.println(rows + " " + "rows affected!");
-//	}
+	@Test
+	public void depositeMoneyTest()
+	{
+		Charity charity = new CharityDAO();
+		Transaction transaction = new  Transaction();
+		
+		transaction.setAccountNo(1000001L);
+		transaction.setAmount(5000.00);
+		transaction.setPinNo(1234);
+		transaction.setTransactionType("debit");
+		
+		int rows = charity.updateMoney(transaction);
+		assertEquals(1, rows);
+	}
 
 	/** Withdraw Money **/
-//	@Test
-//	public void withdrawMoneyTest()	
-//	{
-//		Charity charity = new CharityDAO();
-//		Transaction transaction = new  Transaction();
-//		
-//		transaction.setAccountNo(1000001L);
-//		transaction.setAmount(11500.00);
-//		transaction.setPinNo(1234);
-//		transaction.setTransactionType("credit");
-//		
-//		int rows = charity.updateMoney(transaction);
-//		System.out.println(rows + " " + "rows affected!");
-//	}
+	@Test
+	public void withdrawMoneyTest()	
+	{
+		Charity charity = new CharityDAO();
+		Transaction transaction = new  Transaction();
+		
+		transaction.setAccountNo(1000001L);
+		transaction.setAmount(11500.00);
+		transaction.setPinNo(1234);
+		transaction.setTransactionType("credit");
+		
+		int rows = charity.updateMoney(transaction);
+		assertEquals(1, rows);
+
+	}
 
 	/** Get donation request balance **/
 
@@ -166,7 +139,8 @@ public class TestCase {
 	public void deonationRequestBalance() {
 		Charity charity = new CharityDAO();
 		Double balanceAmount = charity.donationRequestBalance(5);
-		System.out.println("Donation request balance amount:" + balanceAmount);
+		Double expectAmount = 5000D;
+		assertEquals(expectAmount, balanceAmount);
 	}
 
 	/** Transaction **/
@@ -175,7 +149,6 @@ public class TestCase {
 
 //		Charity charity = new CharityD
 
-//		TransactionService transaction = new TransactionService();
 		
 		Transaction donor = new Transaction();
 		Transaction admin = new Transaction();
@@ -195,7 +168,6 @@ public class TestCase {
 
 		System.out.println("Donor balance:" + donorAmount + "Admin balance:" + adminAmount);
 
-//		charity.transaction(donor, admin);
 		TransactionService.transaction(donor, admin);
 
 		/** Update request amount **/
@@ -205,7 +177,7 @@ public class TestCase {
 		Double balanceAmount = 500D;
 		request.setAmount(balanceAmount);
 		request.setRequestId(5);
-//		charity.updateRequestAmount(request);
+
 		TransactionService.updateRequestAmountService(request);
 
 	}

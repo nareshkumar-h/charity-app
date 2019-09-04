@@ -10,7 +10,7 @@ import com.charityapp.model.Transaction;
 
 public interface Charity {
 	
-	public void donorRegister(Donor donor) throws SQLException;
+	public Integer donorRegister(Donor donor) throws SQLException;
 	public Donor donorLogin(Donor donor) throws SQLException;
 	public void donationRequest(DonationRequest request);
 	public List<DonationRequest> listDonationRequest() throws SQLException;

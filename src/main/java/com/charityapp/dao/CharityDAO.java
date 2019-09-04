@@ -17,7 +17,7 @@ public class CharityDAO implements Charity {
 	
 	/** Donor Register 
 	 * @throws SQLException **/
-	public void donorRegister(Donor donor) throws SQLException
+	public Integer donorRegister(Donor donor) throws SQLException
 	{
 		/** Get user details **/
 		String name = donor.getName();
@@ -31,6 +31,8 @@ public class CharityDAO implements Charity {
 		
 		Connection conn = null;
 		PreparedStatement pstmt = null;
+		
+		int rows = 0;
 		
 		try {
 			/** Get connection **/
@@ -46,7 +48,7 @@ public class CharityDAO implements Charity {
 			pstmt.setString(6, role);
 			
 			/** Execute query **/
-			int rows = pstmt.executeUpdate();
+			rows = pstmt.executeUpdate();
 			System.out.println(rows + " " + "rows affected!");
 			
 		} catch (SQLException e) {
@@ -56,6 +58,7 @@ public class CharityDAO implements Charity {
 			conn.close();
 			pstmt.close();
 		}
+		return rows;
 	}
 	
 	/** Donor Login  **/
@@ -82,7 +85,7 @@ public class CharityDAO implements Charity {
 			String donorEmail = null;
 			String donorRole = null;
 			
-			while(rs.next())
+			if(rs.next())
 			{
 				donorEmail = rs.getString("email");
 				donorName = rs.getString("name");
@@ -91,6 +94,10 @@ public class CharityDAO implements Charity {
 				donor.setEmail(donorEmail);
 				donor.setName(donorName);
 				donor.setRole(donorRole);
+				donor.setIsDonorLoggedIn(true);
+			}
+			else {
+				donor.setIsDonorLoggedIn(false);
 			}
 		}
 		catch(SQLException e)
@@ -123,16 +130,23 @@ public class CharityDAO implements Charity {
 			ResultSet rs = pstmt.executeQuery();
 			adminObj = new Admin();
 			
-			while(rs.next())
+			if(rs.next())
 			{
+				/** Get value from resultset **/
 				String name = rs.getString("name");
 				String email = rs.getString("email");
 				String role = rs.getString("role");
 				String date = rs.getString("date");
+				
+				/** Set value to adminObj **/
 				adminObj.setName(name);
 				adminObj.setEmail(email);
 				adminObj.setRole(role);
 				adminObj.setDate(date);
+				adminObj.setIsAdminLoggedIn(true);
+			}
+			else {
+				adminObj.setIsAdminLoggedIn(false);
 			}
 		}
 		catch(SQLException e)

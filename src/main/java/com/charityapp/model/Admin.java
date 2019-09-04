@@ -8,6 +8,13 @@ public class Admin {
 	private String role;
 	private String date;
 	private String password;
+	private Boolean isAdminLoggedIn;
+	public Boolean getIsAdminLoggedIn() {
+		return isAdminLoggedIn;
+	}
+	public void setIsAdminLoggedIn(Boolean isAdminLoggedIn) {
+		this.isAdminLoggedIn = isAdminLoggedIn;
+	}
 	public String getPassword() {
 		return password;
 	}
@@ -16,7 +23,8 @@ public class Admin {
 	}
 	@Override
 	public String toString() {
-		return "Admin [id=" + id + ", name=" + name + ", email=" + email + ", role=" + role + ", date=" + date + "]";
+		return "Admin [id=" + id + ", name=" + name + ", email=" + email + ", role=" + role + ", date=" + date
+				+ ", password=" + password + ", isAdminLoggedIn=" + isAdminLoggedIn + "]";
 	}
 	public int getId() {
 		return id;
