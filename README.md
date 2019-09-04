@@ -2,10 +2,11 @@
 
 ### Logics
 
-- Donor
+- [X] Donor
   - Register
   - Login
-- Admin
+- [X] Admin
   - Login
-- Generate Donation Rquest
-- Fund Transwer
+- [X] Generate Donation Rquest
+- [X] Fund Transwer
+- [ ] Logs
