@@ -2,8 +2,10 @@
 
 ### Logics
 
-- Donor Register
-- Donor Login
-- Admin Login
+- Donor
+  - Register
+  - Login
+- Admin
+  - Admin Login
 - Generate Donation Rquest
 - Fund Transwer
