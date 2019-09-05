@@ -1,4 +1,4 @@
-package com.charityapp.validator;
+package com.charityapp.testcase;
 
 import static org.junit.Assert.*;
 

@@ -6,11 +6,12 @@ import com.charityapp.model.Admin;
 
 public class AdminService {
 	
-	public static void adminLoginService(Admin admin)
+	public static Admin adminLoginService(Admin admin)
 	{
 		Charity charity = new CharityDAO();
-		
-		charity.adminLogin(admin);
+		Admin adminObj = new Admin();
+		adminObj = charity.adminLogin(admin);
+		return adminObj;
 	}
 
 }

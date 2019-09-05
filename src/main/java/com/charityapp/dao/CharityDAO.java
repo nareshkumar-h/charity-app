@@ -123,7 +123,7 @@ public class CharityDAO implements Charity {
 			String adminEmail = admin.getEmail();
 			String adminPassword = admin.getPassword();
 			conn = ConnectionUtil.getConnection();
-			String sql_stmt = "SELECT name,email,role,date FROM admin WHERE email = ? AND password = ?";
+			String sql_stmt = "SELECT admin_id,name,email,role,date FROM admin WHERE email = ? AND password = ?";
 			pstmt = conn.prepareStatement(sql_stmt);
 			pstmt.setString(1, adminEmail);
 			pstmt.setString(2, adminPassword);
@@ -133,12 +133,14 @@ public class CharityDAO implements Charity {
 			if(rs.next())
 			{
 				/** Get value from resultset **/
+				Integer id = rs.getInt("admin_id");
 				String name = rs.getString("name");
 				String email = rs.getString("email");
 				String role = rs.getString("role");
 				String date = rs.getString("date");
 				
 				/** Set value to adminObj **/
+				adminObj.setId(id);
 				adminObj.setName(name);
 				adminObj.setEmail(email);
 				adminObj.setRole(role);
@@ -167,6 +169,7 @@ public class CharityDAO implements Charity {
 		String description = request.getDescription();
 		Double requestAmount = request.getRequestAmount();
 		Integer adminId = request.getAdminId();
+		Long accountNo = request.getAccountNo();
 		
 		Connection conn = null;
 		
@@ -176,7 +179,7 @@ public class CharityDAO implements Charity {
 			
 			conn = ConnectionUtil.getConnection();
 			
-			String sql_stmt = "INSERT INTO donation_request(request_type,description,request_amount,admin_id) VALUES(?,?,?,?)";
+			String sql_stmt = "INSERT INTO donation_request(request_type,description,request_amount,admin_id,account_no) VALUES(?,?,?,?,?)";
 			
 			pstmt = conn.prepareStatement(sql_stmt);
 			
@@ -184,6 +187,7 @@ public class CharityDAO implements Charity {
 			pstmt.setString(2, description);
 			pstmt.setDouble(3, requestAmount);
 			pstmt.setInt(4, adminId);
+			pstmt.setLong(5, accountNo);
 			
 			int rows = pstmt.executeUpdate();
 			System.out.println(rows + " " + "rows affected!");
@@ -208,14 +212,9 @@ public class CharityDAO implements Charity {
 		
 		try {
 			
-			String requestType;
-			String description;
-			Double requestAmount;
-			String date;
-			
 			conn = ConnectionUtil.getConnection();
 			
-			String sql_stmt = "SELECT request_type,description,request_amount,date FROM donation_request";
+			String sql_stmt = "SELECT request_type,description,request_amount,date,account_no,request_id FROM donation_request";
 			
 			pstmt = conn.prepareStatement(sql_stmt);
 			
@@ -227,15 +226,19 @@ public class CharityDAO implements Charity {
 			
 			while(rs.next())
 			{
-				requestType = rs.getString("request_type");
-				description = rs.getString("description");
-				requestAmount = rs.getDouble("request_amount");
-				date = rs.getString("date");
+				String requestType = rs.getString("request_type");
+				String description = rs.getString("description");
+				Double requestAmount = rs.getDouble("request_amount");
+				String date = rs.getString("date");
+				Long accountNo = rs.getLong("account_no");
+				Integer requestId = rs.getInt("request_id");
 				
 				request.setRequestType(requestType);
 				request.setDescription(description);
 				request.setRequestAmount(requestAmount);
 				request.setDate(date);
+				request.setAccountNo(accountNo);
+				request.setRequestId(requestId);
 				
 				/** Add data to list **/
 				list.add(request);
@@ -327,7 +330,6 @@ public class CharityDAO implements Charity {
 	{
 		Long accountNo = transaction.getAccountNo();
 		Double amount = transaction.getAmount();
-		Integer pinNo = transaction.getPinNo();
 		String transactiontype = transaction.getTransactionType();
 		
 		Connection conn = null;
@@ -335,9 +337,9 @@ public class CharityDAO implements Charity {
 		String sql_stmt = null;
 		if(transactiontype == "debit")
 		{
-			sql_stmt = "UPDATE bank_account SET amount = amount - ? WHERE account_no = ? AND pin_no = ?";
+			sql_stmt = "UPDATE bank_account SET amount = amount - ? WHERE account_no = ?";
 		}else {
-			sql_stmt = "UPDATE bank_account SET amount = amount + ? WHERE account_no = ? AND pin_no = ?";
+			sql_stmt = "UPDATE bank_account SET amount = amount + ? WHERE account_no = ?";
 		}
 		int rows = 0;
 		try {
@@ -345,7 +347,7 @@ public class CharityDAO implements Charity {
 			pstmt = conn.prepareStatement(sql_stmt);
 			pstmt.setDouble(1, amount);
 			pstmt.setLong(2, accountNo);
-			pstmt.setInt(3, pinNo);
+//			pstmt.setInt(3, pinNo);
 			
 			rows = pstmt.executeUpdate();
 			

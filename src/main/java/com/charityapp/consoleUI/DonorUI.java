@@ -14,26 +14,26 @@ public class DonorUI {
 	public static void donorRegisterUI()
 	{
 		
-		Scanner input = new Scanner(System.in);
+		Scanner ip = new Scanner(System.in);
 		
 		System.out.println("++++++++++++++++++++++++++++++++++++++++++");
 		System.out.println("++++++++++++++ DONOR REGISTER ++++++++++++");
 		System.out.println("++++++++++++++++++++++++++++++++++++++++++");
 		
 		System.out.println("Enter your name");
-		String donorName = input.next();
+		String donorName = ip.next();
 		
 		System.out.println("Enter your Email");
-		String donorEmail = input.next();
+		String donorEmail = ip.next();
 		
 		System.out.println("Enter your password");
-		String donorPassword = input.next();
+		String donorPassword = ip.next();
 		
 		System.out.println("Enter your date of birth");
-		String donorDOB = input.next();
+		String donorDOB = ip.next();
 		
 		System.out.println("Enter your gender");
-		Character donorGender = input.next().charAt(0);
+		Character donorGender = ip.next().charAt(0);
 		
 		String donorRole = "role_donor";
 		
@@ -46,30 +46,30 @@ public class DonorUI {
 		donor.setRole(donorRole);
 		DonorService.donorRegisterService(donor);
 		
-		input.close();
+		ip.close();
 	}
 	
 	/** Donor Login UI **/
 	public static Donor donorLoginUI()
 	{
-		Scanner input = new Scanner(System.in);
+		Scanner ip = new Scanner(System.in);
 		
 		System.out.println("++++++++++++++++++++++++++++++++++++++++++");
 		System.out.println("++++++++++++++ DONOR Login +++++++++++++++");
 		System.out.println("++++++++++++++++++++++++++++++++++++++++++");
 		
 		System.out.println("Enter your email");
-		String donorEmail = input.next();
+		String donorEmail = ip.next();
 		
 		System.out.println("Enter your password");
-		String donorPassword = input.next();
+		String donorPassword = ip.next();
 		
 		Donor donor = new Donor();
 		donor.setEmail(donorEmail);
 		donor.setPassword(donorPassword);
 		donor = DonorService.donorLoginService(donor);
 
-		input.close();
+		ip.close();
 		
 		return donor;
 		

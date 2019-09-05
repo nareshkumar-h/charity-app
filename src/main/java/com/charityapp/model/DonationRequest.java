@@ -10,7 +10,14 @@ public class DonationRequest {
 	private String date;
 	private Boolean active;
 	private Double amount;
+	private Long accountNo;
 	
+	public Long getAccountNo() {
+		return accountNo;
+	}
+	public void setAccountNo(Long accountNo) {
+		this.accountNo = accountNo;
+	}
 	public Double getAmount() {
 		return amount;
 	}
@@ -60,13 +67,13 @@ public class DonationRequest {
 	public void setActive(Boolean active) {
 		this.active = active;
 	}
-	
 	@Override
 	public String toString() {
 		return "DonationRequest [requestId=" + requestId + ", requestType=" + requestType + ", description="
 				+ description + ", requestAmount=" + requestAmount + ", adminId=" + adminId + ", date=" + date
-				+ ", active=" + active + "]";
+				+ ", active=" + active + ", amount=" + amount + ", accountNo=" + accountNo + "]";
 	}
+	
 	
 	
 }

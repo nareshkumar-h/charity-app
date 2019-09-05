@@ -36,10 +36,11 @@ public class TransactionTestCase {
 		Charity charity = new CharityDAO();
 		DonationRequest request = new DonationRequest();
 
-		request.setRequestType("Education");
+		request.setRequestType("FOOD");
 		request.setDescription("");
 		request.setRequestAmount(500.40);
 		request.setAdminId(1);
+		request.setAccountNo(1000001L);
 		
 		DonationService.donotionRequestService(request);
 
@@ -68,12 +69,12 @@ public class TransactionTestCase {
 			
 			list = DonationService.donationRequestService();
 			System.out.println(list);
-			System.out.println("=====Admin ID=======");
+			System.out.println("===Admin ID===Account No===");
 			for(DonationRequest request : list)
 			{
 				
-				System.out.println(request.getRequestType());
-				System.out.println("============");
+				System.out.println(request.getRequestType() + request.getAccountNo());
+				System.out.println("========================");
 			}
 //			for(List<DonationRequest> lists : list)
 //			{
@@ -95,7 +96,7 @@ public class TransactionTestCase {
 			Double amount = null;
 			Long accountNo = 1000001L;
 			amount = TransactionService.getBalanceService(accountNo);
-			Double expectAmount = 34500D;
+			Double expectAmount = 46500D;
 			assertEquals(expectAmount,amount);
 
 	}
@@ -109,7 +110,7 @@ public class TransactionTestCase {
 		
 		transaction.setAccountNo(1000001L);
 		transaction.setAmount(5000.00);
-		transaction.setPinNo(1234);
+//		transaction.setPinNo(1234);
 		transaction.setTransactionType("debit");
 		
 		int rows = charity.updateMoney(transaction);
@@ -125,7 +126,7 @@ public class TransactionTestCase {
 		
 		transaction.setAccountNo(1000001L);
 		transaction.setAmount(11500.00);
-		transaction.setPinNo(1234);
+//		transaction.setPinNo(1234);
 		transaction.setTransactionType("credit");
 		
 		int rows = charity.updateMoney(transaction);
@@ -139,7 +140,7 @@ public class TransactionTestCase {
 	public void deonationRequestBalance() {
 		Charity charity = new CharityDAO();
 		Double balanceAmount = charity.donationRequestBalance(5);
-		Double expectAmount = 5000D;
+		Double expectAmount = 4000D;
 		assertEquals(expectAmount, balanceAmount);
 	}
 
@@ -157,12 +158,12 @@ public class TransactionTestCase {
 		Double adminAmount = 500D;
 
 		donor.setAccountNo(1000001L);
-		donor.setPinNo(1234);
+//		donor.setPinNo(1234);
 		donor.setAmount(donorAmount);
 		donor.setTransactionType("debit");
 
 		admin.setAccountNo(1000002L);
-		admin.setPinNo(1111);
+//		admin.setPinNo(1111);
 		admin.setAmount(adminAmount);
 		admin.setTransactionType("credit");
 
