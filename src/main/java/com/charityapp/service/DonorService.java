@@ -4,8 +4,8 @@ import java.sql.SQLException;
 
 import javax.xml.validation.Validator;
 
-import com.charityapp.dao.Charity;
 import com.charityapp.dao.CharityDAO;
+import com.charityapp.dao.CharityImpl;
 import com.charityapp.exception.ValidatorException;
 import com.charityapp.model.Donor;
 import com.charityapp.validator.UserValidator;
@@ -15,7 +15,7 @@ public class DonorService {
 	/** Donor register service **/
 	public static Integer donorRegisterService(Donor donor)
 	{
-		Charity charity = new CharityDAO();
+		CharityDAO charity = new CharityImpl();
 		int rows = 0;
 		try {
 			
@@ -37,7 +37,7 @@ public class DonorService {
 	/** Donor login service **/
 	public static Donor donorLoginService(Donor donor)
 	{
-		Charity charity = new CharityDAO();
+		CharityDAO charity = new CharityImpl();
 		
 		try {
 			UserValidator.donorLoginValidator(donor);

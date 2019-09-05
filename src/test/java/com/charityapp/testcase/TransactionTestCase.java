@@ -8,8 +8,8 @@ import java.util.List;
 
 import org.junit.Test;
 
-import com.charityapp.dao.Charity;
 import com.charityapp.dao.CharityDAO;
+import com.charityapp.dao.CharityImpl;
 import com.charityapp.exception.ValidatorException;
 import com.charityapp.model.DonationRequest;
 import com.charityapp.model.Donor;
@@ -33,7 +33,7 @@ public class TransactionTestCase {
 	@Test
 	public void donationRequestTest() {
 
-		Charity charity = new CharityDAO();
+		CharityDAO charity = new CharityImpl();
 		DonationRequest request = new DonationRequest();
 
 		request.setRequestType("FOOD");
@@ -53,9 +53,10 @@ public class TransactionTestCase {
 
 	}
 
-	/** List donation requests **/
+	/** List donation requests 
+	 * @throws SQLException **/
 	@Test
-	public void listDonationRequestTest() {
+	public void listDonationRequestTest() throws SQLException {
 
 //		Charity charity = new CharityDAO();
 
@@ -105,7 +106,7 @@ public class TransactionTestCase {
 	@Test
 	public void depositeMoneyTest()
 	{
-		Charity charity = new CharityDAO();
+		CharityDAO charity = new CharityImpl();
 		Transaction transaction = new  Transaction();
 		
 		transaction.setAccountNo(1000001L);
@@ -113,15 +114,15 @@ public class TransactionTestCase {
 //		transaction.setPinNo(1234);
 		transaction.setTransactionType("debit");
 		
-		int rows = charity.updateMoney(transaction);
-		assertEquals(1, rows);
+		Boolean moneyUpdate = charity.updateMoney(transaction);
+		assertEquals(true, moneyUpdate);
 	}
 
 	/** Withdraw Money **/
 	@Test
 	public void withdrawMoneyTest()	
 	{
-		Charity charity = new CharityDAO();
+		CharityDAO charity = new CharityImpl();
 		Transaction transaction = new  Transaction();
 		
 		transaction.setAccountNo(1000001L);
@@ -129,8 +130,8 @@ public class TransactionTestCase {
 //		transaction.setPinNo(1234);
 		transaction.setTransactionType("credit");
 		
-		int rows = charity.updateMoney(transaction);
-		assertEquals(1, rows);
+		Boolean moneyUpdate = charity.updateMoney(transaction);
+		assertEquals(true, moneyUpdate);
 
 	}
 
@@ -138,7 +139,7 @@ public class TransactionTestCase {
 
 	@Test
 	public void deonationRequestBalance() {
-		Charity charity = new CharityDAO();
+		CharityDAO charity = new CharityImpl();
 		Double balanceAmount = charity.donationRequestBalance(5);
 		Double expectAmount = 4000D;
 		assertEquals(expectAmount, balanceAmount);

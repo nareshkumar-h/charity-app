@@ -2,8 +2,8 @@ package com.charityapp.service;
 
 import java.sql.SQLException;
 
-import com.charityapp.dao.Charity;
 import com.charityapp.dao.CharityDAO;
+import com.charityapp.dao.CharityImpl;
 import com.charityapp.model.DonationRequest;
 import com.charityapp.model.Transaction;
 
@@ -12,7 +12,7 @@ public class TransactionService {
 	/** Get balance service **/
 	public static Double getBalanceService(Long accountNo)
 	{
-		Charity charity = new CharityDAO();
+		CharityDAO charity = new CharityImpl();
 		Double amount = null;
 		try {
 			amount = charity.balanceEnquiry(accountNo);
@@ -27,7 +27,7 @@ public class TransactionService {
 	{
 		
 		Double requestAmount = null;
-		Charity charity = new CharityDAO();
+		CharityDAO charity = new CharityImpl();
 		
 		requestAmount = charity.donationRequestBalance(requestId);
 		
@@ -38,7 +38,7 @@ public class TransactionService {
 	/** Update money service **/
 	public static void updateMoneyService(Transaction transaction)
 	{
-		Charity charity = new CharityDAO();
+		CharityDAO charity = new CharityImpl();
 		
 		charity.updateMoney(transaction);
 	}
@@ -46,22 +46,31 @@ public class TransactionService {
 	/** Update request amount **/
 	public static void updateRequestAmountService(DonationRequest request)
 	{
-		Charity charity = new CharityDAO();
+		CharityDAO charity = new CharityImpl();
 		charity.updateRequestAmount(request);
 	}
 	
 /** Transaction **/
 	
-	public static void transaction(Transaction donor,Transaction admin)
+	public static Boolean transaction(Transaction donor,Transaction admin)
 	{
 		
-		Charity charity = new CharityDAO();
+		CharityDAO charity = new CharityImpl();
+		
+		Boolean isMoneyUpdated = false;
 
 		/** Update donor money **/
-		charity.updateMoney(donor);
+		Boolean isDonoerMoneyUpdated = charity.updateMoney(donor);
 		
 		/** Update admin money **/
-		charity.updateMoney(admin);
+		Boolean isAdminMoneyUpdated = charity.updateMoney(admin);
+		
+		if(isDonoerMoneyUpdated == true && isAdminMoneyUpdated == true)
+		{
+			isMoneyUpdated = true;
+		}
+		
+		return isMoneyUpdated;
 		
 	}
 }

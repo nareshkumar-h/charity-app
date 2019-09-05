@@ -1,5 +1,6 @@
 package com.charityapp.consoleUI;
 
+import java.sql.SQLException;
 import java.util.List;
 import java.util.Scanner;
 
@@ -12,12 +13,11 @@ import com.charityapp.service.DonorService;
 public class AdminUI {
 	
 	/** Admin login **/
-	public static Admin adminLoginUI()
+	public static Admin adminLoginUI(Scanner input)
 	{
+		
 		Admin adminObj = new Admin();
 		System.out.println("Admin Login");
-		
-		Scanner input = new Scanner(System.in);
 		
 		System.out.println("Enter your email");
 		String adminEmail = input.next();
@@ -33,16 +33,17 @@ public class AdminUI {
 		/** Call login service **/
 		adminObj = AdminService.adminLoginService(admin);
 		
-		input.close();
-		
 		return adminObj;
 	}
 	
-	/** Get donation request **/
+	/** Get donation request 
+	 * @throws  **/
 	public static List<DonationRequest> listDonationRequest()
 	{
-		List<DonationRequest> list;
-		list = DonationService.donationRequestService();
+		List<DonationRequest> list = null;
+		try {
+			list = DonationService.donationRequestService();
+		
 		
 		System.out.println("Donation Requests!");
 		
@@ -55,40 +56,69 @@ public class AdminUI {
 			System.out.println("|| " + request.getRequestId() + " ||" 
 		+request.getRequestType() + "||" + request.getDescription() + "||" + request.getRequestAmount() +"||" + request.getAccountNo() + "||");
 		}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 		return list;
 	}
 	
 	/** Donation Request **/
 	
-	public static void donationRequestUI(Admin admin)
+	public static void donationRequestUI(Admin admin,Scanner ip)
 	{
-		System.out.println("Donation Request");
 		
-		Scanner input = new Scanner(System.in);
+		System.out.println("=====================");
+		System.out.println("|| 1.Create Request ||");
+		System.out.println("=====================");
 		
-		System.out.println("Enter the request type");
-		String requestType = input.next();
+		System.out.println("Enter your choice");
+		int option = ip.nextInt();
 		
-		System.out.println("Enter the description");
-		String descritption = input.next();
+		switch(option)
+		{
 		
-		System.out.println("Enter the amount");
-		Double amount = input.nextDouble();
+			case 1:
 		
-		Integer adminId = admin.getId();
+				System.out.println("Donation Request");
+				
+				System.out.println("Enter the request type");
+				String requestType = ip.next();
+				
+				System.out.println("Enter the description");
+				String descritption = ip.next();
+				
+				System.out.println("Enter the amount");
+				Double amount = ip.nextDouble();
+				
+				Integer adminId = admin.getId();
+				
+				System.out.println("Enter your account no");
+				Long accountNo = ip.nextLong();
+				
+				DonationRequest request = new DonationRequest();
 		
-		System.out.println("Enter your account no");
-		Long accountNo = input.nextLong();
+				request.setRequestType(requestType);
+				request.setDescription(descritption);
+				request.setRequestAmount(amount);
+				request.setAdminId(adminId);
+				request.setAccountNo(accountNo);
+				
+				Boolean requestStatus = DonationService.donotionRequestService(request);
+				
+				if(requestStatus)
+				{
+					System.out.println("Request send successfully!");
+					
+					/** callback function **/
+					donationRequestUI(admin, ip);
+				}
 		
-		DonationRequest request = new DonationRequest();
-
-		request.setRequestType(requestType);
-		request.setDescription(descritption);
-		request.setRequestAmount(amount);
-		request.setAdminId(adminId);
-		request.setAccountNo(accountNo);
+				break;
+				
+			default:
+				System.out.println("Choose correct option");	
+	}
 		
-		DonationService.donotionRequestService(request);
 	}
 	
 }

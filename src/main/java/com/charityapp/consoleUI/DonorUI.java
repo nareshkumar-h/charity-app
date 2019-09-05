@@ -11,10 +11,9 @@ import com.charityapp.service.DonorService;
 public class DonorUI {
 	
 	/** Donor Register UI **/
-	public static void donorRegisterUI()
+	public static void donorRegisterUI(Scanner ip)
 	{
 		
-		Scanner ip = new Scanner(System.in);
 		
 		System.out.println("++++++++++++++++++++++++++++++++++++++++++");
 		System.out.println("++++++++++++++ DONOR REGISTER ++++++++++++");
@@ -46,13 +45,11 @@ public class DonorUI {
 		donor.setRole(donorRole);
 		DonorService.donorRegisterService(donor);
 		
-		ip.close();
 	}
 	
 	/** Donor Login UI **/
-	public static Donor donorLoginUI()
+	public static Donor donorLoginUI(Scanner ip)
 	{
-		Scanner ip = new Scanner(System.in);
 		
 		System.out.println("++++++++++++++++++++++++++++++++++++++++++");
 		System.out.println("++++++++++++++ DONOR Login +++++++++++++++");
@@ -69,7 +66,6 @@ public class DonorUI {
 		donor.setPassword(donorPassword);
 		donor = DonorService.donorLoginService(donor);
 
-		ip.close();
 		
 		return donor;
 		

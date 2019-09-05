@@ -29,13 +29,13 @@ public class CharityTest {
 		switch(choice)
 		{
 			case 1:
-				DonorUI.donorRegisterUI();
+				DonorUI.donorRegisterUI(input);
 				break;
 			case 2:
 				Donor donor = new Donor();
-				donor = DonorUI.donorLoginUI();
+				donor = DonorUI.donorLoginUI(input);
 //				List<DonationRequest> list = new ArrayList<DonationRequest>();
-				if(donor.getIsDonorLoggedIn() == true)
+				if(donor.getIsDonorLoggedIn())
 				{
 //					list = 
 					System.out.println("Welcom" +" "+donor.getName());
@@ -61,10 +61,10 @@ public class CharityTest {
 				break;
 			case 3:
 				Admin admin = new Admin();
-				admin = AdminUI.adminLoginUI();
+				admin = AdminUI.adminLoginUI(input);
 				if(admin.getIsAdminLoggedIn() == true)
 				{
-					AdminUI.donationRequestUI(admin);
+					AdminUI.donationRequestUI(admin,input);
 				}
 				else {
 					System.out.println("Login failed!");

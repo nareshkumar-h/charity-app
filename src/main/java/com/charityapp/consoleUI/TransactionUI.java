@@ -41,7 +41,8 @@ public class TransactionUI {
 		admin.setAmount(amount);
 		admin.setTransactionType("credit");
 		
-		TransactionService.transaction(donor, admin);
+		Boolean isMoneyUpdated = TransactionService.transaction(donor, admin);
+		
 		
 		/** Update request amount **/
 
@@ -52,7 +53,18 @@ public class TransactionUI {
 		request.setRequestId(requestId);
 
 		TransactionService.updateRequestAmountService(request);
+		
+		/** Get donor Balance **/
+		Double donorBalance = TransactionService.getBalanceService(donor.getAccountNo());
 
+		if(isMoneyUpdated)
+		{
+			System.out.println("+++++Transaction Success+++++");
+			System.out.println("===============");
+			System.out.println("|| Amount Transwerd ||" + amount+ "||");
+			System.out.println("===============");
+			System.out.println("|| Balance ||" + donorBalance + "||");
+		}
 		ip.close();
 	}
 
